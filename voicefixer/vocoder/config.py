@@ -9,11 +9,23 @@ class Config:
     @classmethod
     def refresh(cls, sr):
         if sr == 44100:
-            Config.ckpt = str(
-                cached_path(
-                    "hf://voicefixer/vocoder/model.ckpt-1490000_trimed.pt"
+            # --- MODIFICATION START ---
+            local_model_path = os.environ.get(
+                "VOICEFIXER_VOCODER_MODEL", None
+            )  # Get path from environment variable
+
+            if local_model_path and os.path.exists(local_model_path):
+                Config.ckpt = local_model_path
+                print(f"Using local vocoder model: {Config.ckpt}")  # Add print statement
+            else:
+                # Fallback to downloading from Hugging Face if no local path or file not found
+                Config.ckpt = str(
+                    cached_path(
+                        "hf://voicefixer/vocoder/model.ckpt-1490000_trimed.pt"
+                    )
                 )
-            )
+                print("Downloading vocoder model from Hugging Face Hub...")  # Add print statement
+            # --- MODIFICATION END ---
             Config.cond_channels = 512
             Config.m_channels = 768
             Config.resstack_depth = [8, 8, 8, 8]
