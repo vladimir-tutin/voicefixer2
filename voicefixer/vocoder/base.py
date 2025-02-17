@@ -12,7 +12,18 @@ class Vocoder(nn.Module):
         super(Vocoder, self).__init__()
         Config.refresh(sample_rate)
         self.rate = sample_rate
-        self._load_pretrain(Config.ckpt)
+        # --- MODIFICATION START ---
+        local_vocoder_ckpt_path = os.environ.get(
+            "VOICEFIXER_VOCODER_CKPT", None
+        )  # Environment variable for vocoder checkpoint
+
+        if local_vocoder_ckpt_path and os.path.exists(local_vocoder_ckpt_path):
+            self._load_pretrain(local_vocoder_ckpt_path)
+            print(f"Using local vocoder checkpoint: {local_vocoder_ckpt_path}")
+        else:
+            self._load_pretrain(Config.ckpt)  # Use the cached_path version
+            print("Using vocoder checkpoint from cached_path...")
+        # --- MODIFICATION END ---
         self.weight_torch = Config.get_mel_weight_torch(percent=1.0)[
             None, None, None, ...
         ]
