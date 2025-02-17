@@ -15,6 +15,7 @@ class Config:
                 Config.ckpt = local_model_path
                 print(f"Using local vocoder model: {Config.ckpt}")  # Add print statement
             else:
+                print("Downloading DUMB vocoder model from Hugging Face Hub...")  # This line
                 # Fallback to downloading from Hugging Face if no local path or file not found
                 Config.ckpt = str(
                     cached_path(
