@@ -10,10 +10,7 @@ class Config:
     def refresh(cls, sr):
         if sr == 44100:
             # --- MODIFICATION START ---
-            local_model_path = os.environ.get(
-                "VOICEFIXER_VOCODER_MODEL", None
-            )  # Get path from environment variable
-
+            local_model_path = "C:\Users\Patrick\.cache\voicefixer\synthesis_module\44100\model.ckpt-1490000_trimed.pt"
             if local_model_path and os.path.exists(local_model_path):
                 Config.ckpt = local_model_path
                 print(f"Using local vocoder model: {Config.ckpt}")  # Add print statement
